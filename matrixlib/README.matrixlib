@@ -1,0 +1,32 @@
+Biblioteka do obslugi wyswietlacza led matrix 32x64 SPI via FPGA
+
+Architektura: 
+Biblioteka sklada sie z metod publicznych:
+ m_init()
+ m_set_brightness(brightness) 1-8
+ m_putpixel(x,y,color);
+ m_putline(x1,y1,x2,y2,width,color);
+ m_putrectangle(x1,y1,x2,y2,line_color,fill_color);
+ m_putcircle(x,y,radius,line_color,fill_color);
+ m_putbitmap(bitmap_buffer,x,y,len);
+ m_textwrite(string,font,font_size,color);
+ m_display()
+ m_clear()
+ m_end()
+ 
+I metod wewnetrznych:
+ mi_commit_to_matrix()
+ mi_commit_frame_buffer()
+ mi_init_spi()
+ mi_close_spi()
+
+Zasada dzialania i uwagi:
+
+dostepne kolory: kody kolorow o 0 do 63, dwa bity R, dwa bity G, dwa bity B (6 bitowy kolor)
+
+Istnieja dwa bufory ramki - edycyjny i roboczy, zadeklarowane jako zmienne globalne  wewnatrz biblioteki
+wszystkie funkcje rysujace wymagaja po wywolaniu wywolania funkcji m_display aby przeniesc zawartosc z bufora edycyjnego do roboczego - wtedy nastepuje wyswietlenie zawartosci bufora roboczego
+
+edycyjny bufor ramki jest dostepny jedynie poprzez funkcje - nie ma dostepu bezposredniego, nie ma instancjalizacji buforow, wyswietlaczy, itp. wszystko posiada jedna sztywna instancje zadeklarowana w pliku naglowkowym biblioteki
+
+
